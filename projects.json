@@ -1,0 +1,92 @@
+{
+  "Mascot": [
+    {
+      "name": "Project 1",
+      "folder": "projects/Mascot/project 1/"
+    },
+    {
+      "name": "Project 2",
+      "folder": "projects/Mascot/project 2/"
+    },
+    {
+      "name": "Project 3",
+      "folder": "projects/Mascot/project 3/"
+    },
+    {
+      "name": "Project 4",
+      "folder": "projects/Mascot/project 4/"
+    },
+    {
+      "name": "Project 5",
+      "folder": "projects/Mascot/project 5/"
+    },
+    {
+      "name": "Project 6",
+      "folder": "projects/Mascot/project 6/"
+    },
+    {
+      "name": "Project 7",
+      "folder": "projects/Mascot/project 7/"
+    },
+    {
+      "name": "Project 8",
+      "folder": "projects/Mascot/project 8/"
+    }
+  ],
+
+  "Text Base": [
+    {
+      "name": "Project 1",
+      "folder": "projects/Text Base/project 1/"
+    }
+  ],
+
+  "Vector Art": [
+    {
+      "name": "Project 1",
+      "folder": "projects/vector-art/project 1/"
+    },
+    {
+      "name": "Project 2",
+      "folder": "projects/vector-art/project 2/"
+    },
+    {
+      "name": "Project 3",
+      "folder": "projects/vector-art/project 3/"
+    },
+    {
+      "name": "Project 4",
+      "folder": "projects/vector-art/project 4/"
+    },
+    {
+      "name": "Project 5",
+      "folder": "projects/vector-art/project 5/"
+    },
+    {
+      "name": "Project 6",
+      "folder": "projects/vector-art/project 6/"
+    }
+  ],
+
+  "Emotes": [
+    {
+      "name": "Project 1",
+      "folder": "projects/Emotes/project 1/"
+    }
+  ],
+
+  "V-Tuber": [
+    {
+      "name": "V-Tuber 1",
+      "folder": "projects/V-tuber/v-tuber 1/"
+    },
+    {
+      "name": "V-Tuber 2",
+      "folder": "projects/V-tuber/v-tuber 2/"
+    },
+    {
+      "name": "V-Tuber 3",
+      "folder": "projects/V-tuber/v-tuber 3/"
+    }
+  ]
+}
