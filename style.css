@@ -73,6 +73,7 @@ nav a:hover{
 .hero h2{
     font-size:52px;
     margin-bottom:20px;
+    animation: fadeDown 1s ease;
 }
 
 .hero p{
