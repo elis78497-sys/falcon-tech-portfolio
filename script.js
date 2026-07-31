@@ -201,9 +201,29 @@ function openGallery() {
 
     overlay.appendChild(content);
 
-    showImage();
+showImage();
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+content.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+content.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+
+    if (touchStartX - touchEndX > 50) {
+        next.click();
+    }
+
+    if (touchEndX - touchStartX > 50) {
+        prev.click();
+    }
+}, { passive: true });
 
 }
+
 /* ===========================
 SEARCH
 =========================== */
