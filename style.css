@@ -989,6 +989,10 @@ CONTACT
     transition:.35s;
 
 }
+.contact-card{
+    text-decoration: none;
+    color: inherit;
+}
 
 .contact-card:hover{
 
