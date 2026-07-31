@@ -1,270 +1,447 @@
-const portfolio = {
+/* ==========================================
+   FALCON VISUALS PORTFOLIO
+========================================== */
 
-"Mascot": Array.from({ length: 8 }, (_, i) => ({
-title: `Project ${i + 1}`,
-images: [
-`projects/Mascot/project ${i + 1}/logo 1.jpeg`,
-i < 4
-? `projects/Mascot/project ${i + 1}/banner 1.jpeg`
-: `projects/Mascot/project ${i + 1}/banner 1.png`,
-i === 0
-? `projects/Mascot/project ${i + 1}/overlay 1.jpeg`
-: `projects/Mascot/project ${i + 1}/overlay 1.png`
-]
-})),
-
-"Text Base": [
-{
-title: "Project 1",
-images: [
-"projects/Text Base/project 1/logo.jpeg",
-"projects/Text Base/project 1/banner.png",
-"projects/Text Base/project 1/overlay.png"
-]
-}
-],
-
-"Vector Art": Array.from({ length: 6 }, (_, i) => ({
-title: `Project ${i + 1}`,
-images: [
-i === 0
-? `projects/vector-art/project ${i + 1}/logo.webp`
-: `projects/vector-art/project ${i + 1}/logo.jpeg`,
-
-i === 0
-? `projects/vector-art/project ${i + 1}/banner.webp`
-: i === 1
-? `projects/vector-art/project ${i + 1}/banner.jpeg`
-: `projects/vector-art/project ${i + 1}/banner.png`
-]
-})),
-
-"Emotes": [
-{
-title: "Project 1",
-images: [
-"projects/Emotes/project 1/1.jpeg",
-"projects/Emotes/project 1/2.jpeg",
-"projects/Emotes/project 1/3.jpeg",
-"projects/Emotes/project 1/4.jpeg"
-]
-}
-],
-
-"V-Tuber": Array.from({ length: 11 }, (_, i) => ({
-title: `V-Tuber ${i + 1}`,
-images: [
-`projects/V-tuber/v-tuber ${i + 1}/v-tuber.jpeg`
-]
-}))
-
-};
+let portfolio = {};
+let currentImages = [];
+let currentIndex = 0;
 
 const sectionMap = {
-"Mascot":"mascot",
-"Text Base":"textbase",
-"Vector Art":"vector",
-"Emotes":"emotes",
-"V-Tuber":"vtuber"
+    "Artwork": "artwork",
+    "Mascot": "mascot",
+    "Text Base": "textbase",
+    "Vector Art": "vector",
+    "Emotes": "emotes",
+    "V-tuber": "vtuber"
 };
 
-function createGallery(){
+/* =========================
+LOAD JSON
+========================= */
 
-Object.keys(portfolio).forEach(category=>{
+async function loadPortfolio() {
 
-const section=document.querySelector("#"+sectionMap[category]+" .gallery");
+    try {
 
-if(!section) return;
+        const response = await fetch("projects.json");
 
-section.innerHTML="";
+        portfolio = await response.json();
 
-portfolio[category].forEach(project=>{
+        createGallery();
 
-const card=document.createElement("div");
-card.className="project-card";
+    } catch (err) {
 
-const img=document.createElement("img");
+        console.error("Projects JSON Error:", err);
 
-img.src=project.images[0];
-
-img.alt=project.title;
-
-const title=document.createElement("h3");
-title.textContent=project.title;
-
-card.appendChild(img);
-card.appendChild(title);
-
-card.onclick=()=>openGallery(project.images);
-
-section.appendChild(card);
-
-});
-
-});
-
-}
-function openGallery(images){
-
-if(!images || images.length===0){
-alert("No images found.");
-return;
-}
-
-let current=0;
-
-const overlay=document.createElement("div");
-overlay.className="preview";
-
-const media=document.createElement("div");
-media.className="preview-media";
-
-const prev=document.createElement("button");
-prev.className="nav prev";
-prev.innerHTML="❮";
-
-const next=document.createElement("button");
-next.className="nav next";
-next.innerHTML="❯";
-
-function show(){
-
-media.innerHTML="";
-
-const file=images[current];
-const ext=file.split(".").pop().toLowerCase();
-
-if(["mp4","webm"].includes(ext)){
-
-const video=document.createElement("video");
-video.src=file;
-video.controls=true;
-video.autoplay=true;
-
-media.appendChild(video);
-
-}else{
-
-const img=document.createElement("img");
-img.src=file;
-
-media.appendChild(img);
-
-}
-
-}
-
-prev.onclick=(e)=>{
-
-e.stopPropagation();
-
-current--;
-
-if(current<0)
-current=images.length-1;
-
-show();
-
-};
-
-next.onclick=(e)=>{
-
-e.stopPropagation();
-
-current++;
-
-if(current>=images.length)
-current=0;
-
-show();
-
-};
-
-overlay.onclick=()=>overlay.remove();
-
-media.onclick=(e)=>e.stopPropagation();
-
-overlay.appendChild(prev);
-overlay.appendChild(media);
-overlay.appendChild(next);
-
-document.body.appendChild(overlay);
-
-show();
-
-document.addEventListener("keydown",function galleryControls(e){
-
-if(!document.body.contains(overlay)){
-document.removeEventListener("keydown",galleryControls);
-return;
-}
-
-if(e.key==="ArrowRight"){
-
-current++;
-
-if(current>=images.length)
-current=0;
-
-show();
-
-}
-
-if(e.key==="ArrowLeft"){
-
-current--;
-
-if(current<0)
-current=images.length-1;
-
-show();
-
-}
-
-if(e.key==="Escape"){
-
-overlay.remove();
-document.removeEventListener("keydown",galleryControls);
-
-}
-
-});
-
-}
-createGallery();
-
-// Disable Right Click
-document.addEventListener("contextmenu", function(e){
-    e.preventDefault();
-});
-
-// Disable Drag Images
-document.addEventListener("dragstart", function(e){
-    if(e.target.tagName==="IMG"){
-        e.preventDefault();
-    }
-});
-
-// Disable Ctrl + U
-document.addEventListener("keydown", function(e){
-
-    if(e.ctrlKey && (e.key==="u" || e.key==="U")){
-        e.preventDefault();
     }
 
-});
+}
 
-// Optional: ESC closes gallery even if focus changes
-document.addEventListener("keydown", function(e){
+loadPortfolio();
 
-    if(e.key==="Escape"){
+/* =========================
+CREATE GALLERY
+========================= */
 
-        const preview=document.querySelector(".preview");
+function createGallery() {
 
-        if(preview){
-            preview.remove();
+    Object.keys(portfolio).forEach(category => {
+
+        const gallery = document.querySelector(
+            "#" + sectionMap[category] + " .gallery"
+        );
+
+        if (!gallery) return;
+
+        gallery.innerHTML = "";
+
+        portfolio[category].forEach(project => {
+
+            const card = document.createElement("div");
+
+            card.className = "project-card";
+
+            card.innerHTML = `
+
+                <img src="${project.images[0]}" loading="lazy">
+
+                <h4>${project.title}</h4>
+
+            `;
+
+            card.onclick = () => {
+
+                currentImages = project.images.filter(Boolean);
+
+                currentIndex = 0;
+
+                openGallery();
+
+            };
+
+            gallery.appendChild(card);
+
+        });
+
+    });
+
+}
+/* ===========================
+FULL SCREEN GALLERY
+=========================== */
+
+function openGallery() {
+
+    const overlay = document.getElementById("galleryOverlay");
+
+    overlay.innerHTML = "";
+
+    overlay.classList.add("active");
+
+    const content = document.createElement("div");
+    content.className = "gallery-content";
+
+    const close = document.createElement("span");
+    close.className = "close-gallery";
+    close.innerHTML = "&times;";
+
+    close.onclick = () => {
+
+        overlay.classList.remove("active");
+
+    };
+
+    const prev = document.createElement("button");
+    prev.className = "gallery-prev";
+    prev.innerHTML = "❮";
+
+    const next = document.createElement("button");
+    next.className = "gallery-next";
+    next.innerHTML = "❯";
+
+    function showImage() {
+
+        content.querySelectorAll("img,video,.image-wrapper").forEach(el => el.remove());
+
+        const file = currentImages[currentIndex];
+
+        if (!file) return;
+
+        const ext = file.split(".").pop().toLowerCase();
+
+        if (["mp4", "webm"].includes(ext)) {
+
+            const video = document.createElement("video");
+
+            video.src = file;
+
+            video.controls = true;
+
+            video.autoplay = true;
+
+            video.playsInline = true;
+
+            content.appendChild(video);
+
+        } else {
+
+            const wrapper = document.createElement("div");
+
+            wrapper.className = "image-wrapper";
+
+            const img = document.createElement("img");
+
+            img.src = file;
+
+            img.draggable = false;
+
+            img.loading = "lazy";
+
+            const watermark = document.createElement("div");
+
+            watermark.className = "watermark";
+
+            watermark.textContent = "FALCON VISUALS";
+
+            wrapper.appendChild(img);
+
+            wrapper.appendChild(watermark);
+
+            content.appendChild(wrapper);
+
         }
 
     }
+
+    prev.onclick = () => {
+
+        currentIndex--;
+
+        if (currentIndex < 0)
+            currentIndex = currentImages.length - 1;
+
+        showImage();
+
+    };
+
+    next.onclick = () => {
+
+        currentIndex++;
+
+        if (currentIndex >= currentImages.length)
+            currentIndex = 0;
+
+        showImage();
+
+    };
+
+    content.appendChild(close);
+    content.appendChild(prev);
+    content.appendChild(next);
+
+    overlay.appendChild(content);
+
+    showImage();
+
+}
+/* ===========================
+SEARCH
+=========================== */
+
+const search = document.getElementById("search");
+
+if (search) {
+
+    search.addEventListener("input", function () {
+
+        const value = this.value.toLowerCase();
+
+        document.querySelectorAll(".project-card").forEach(card => {
+
+            const title = card.querySelector("h4").textContent.toLowerCase();
+
+            card.style.display = title.includes(value)
+                ? ""
+                : "none";
+
+        });
+
+    });
+
+}
+
+/* ===========================
+FILTERS
+=========================== */
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        document.querySelectorAll(".filter-btn")
+            .forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        const filter = btn.textContent;
+
+        document.querySelectorAll("#portfolio section").forEach(section => {
+
+            const title = section.querySelector("h3").textContent;
+
+            if (filter === "All" || filter === title) {
+
+                section.style.display = "block";
+
+            } else {
+
+                section.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+});
+
+/* ===========================
+FAQ
+=========================== */
+
+document.querySelectorAll(".faq-question").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        button.parentElement.classList.toggle("active");
+
+    });
+
+});
+
+/* ===========================
+COUNTERS
+=========================== */
+
+const counters = document.querySelectorAll(".counter");
+
+const observer = new IntersectionObserver(entries => {
+
+    entries.forEach(entry => {
+
+        if (!entry.isIntersecting) return;
+
+        const counter = entry.target;
+
+        const target = Number(counter.dataset.target);
+
+        let value = 0;
+
+        const speed = target / 80;
+
+        function update() {
+
+            value += speed;
+
+            if (value < target) {
+
+                counter.textContent = Math.floor(value);
+
+                requestAnimationFrame(update);
+
+            } else {
+
+                counter.textContent = target + "+";
+
+            }
+
+        }
+
+        update();
+
+        observer.unobserve(counter);
+
+    });
+
+});
+
+counters.forEach(counter => observer.observe(counter));
+
+/* ===========================
+MOBILE MENU
+=========================== */
+
+const menuToggle = document.getElementById("menuToggle");
+
+const navMenu = document.getElementById("navMenu");
+
+if (menuToggle) {
+
+    menuToggle.onclick = () => {
+
+        navMenu.classList.toggle("active");
+
+    };
+
+}
+
+/* ===========================
+LOADER
+=========================== */
+
+window.addEventListener("load", () => {
+
+    const loader = document.getElementById("loader");
+
+    if (loader) {
+
+        setTimeout(() => {
+
+            loader.classList.add("hide");
+
+        }, 1000);
+
+    }
+
+});
+
+/* ===========================
+IMAGE PROTECTION
+=========================== */
+
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+document.addEventListener("dragstart", e => {
+
+    if (e.target.tagName === "IMG") {
+
+        e.preventDefault();
+
+    }
+
+});
+/* =========================
+SCROLL REVEAL
+========================= */
+
+const reveals = document.querySelectorAll(".reveal");
+
+function revealOnScroll() {
+
+    reveals.forEach(section => {
+
+        const top = section.getBoundingClientRect().top;
+
+        const trigger = window.innerHeight - 120;
+
+        if (top < trigger) {
+
+            section.classList.add("active");
+
+        }
+
+    });
+
+}
+
+window.addEventListener("scroll", revealOnScroll);
+
+window.addEventListener("load", revealOnScroll);
+/* ==========================
+CURSOR GLOW
+========================== */
+
+const cursor = document.querySelector(".cursor-glow");
+console.log(cursor);
+
+document.addEventListener("mousemove",(e)=>{
+
+    cursor.style.left = e.clientX + "px";
+
+    cursor.style.top = e.clientY + "px";
+
+});
+
+document.querySelectorAll("a, button, .project-card").forEach(item => {
+
+    item.addEventListener("mouseenter", () => {
+
+        cursor.style.width = "55px";
+        cursor.style.height = "55px";
+
+        cursor.style.boxShadow =
+            "0 0 35px rgba(181,116,255,.9), 0 0 80px rgba(181,116,255,.6)";
+
+    });
+
+    item.addEventListener("mouseleave", () => {
+
+        cursor.style.width = "20px";
+        cursor.style.height = "20px";
+
+        cursor.style.boxShadow =
+            "0 0 25px rgba(181,116,255,.65), 0 0 55px rgba(181,116,255,.45), 0 0 90px rgba(181,116,255,.25)";
+
+    });
 
 });
